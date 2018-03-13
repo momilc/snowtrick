@@ -1,0 +1,28 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block body_id 'admin_figure_edit' %}
+
+{% block main %}
+    <h1>{{ 'title.edit_figure'|trans({'%id%': figure.id}) }}</h1>
+
+    {{ include('admin/blog/_form.html.twig', {
+        form: form,
+        button_label: 'action.save'|trans,
+        include_back_to_home_link: true,
+    }, with_context = false) }}
+{% endblock %}
+
+{% block sidebar %}
+    <div class="section">
+        <a href="{{ path('snowtrick_admin_figure_show', {id: figure.id}) }}" class="btn btn-lg btn-block btn-success">
+            <i class="fa fa-eye" aria-hidden="true"></i> {{ 'action.show_figure'|trans }}
+        </a>
+    </div>
+
+    <div class="section actions">
+        {{ include('admin/blog/_delete_form.html.twig', {figure: figure}, with_context = false) }}
+    </div>
+
+    {{ parent() }}
+
+{% endblock %}

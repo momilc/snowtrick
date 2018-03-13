@@ -1,0 +1,244 @@
+{% extends 'base.html.twig' %}
+
+{% block body_id 'snowtrick_blog_index' %}
+{% block header %}
+<header>
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark fixed-top" role="navigation">
+        <div class="container">
+
+            <a class="navbar-brand" href="{{ path('snowtrick_homepage') }}">
+                Snowtrick
+            </a>
+
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('snowtrick_blog_index') }}">
+                            <i class="fa fa-home" aria-hidden="true"></i> {{ 'menu.homepage'|trans }}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('snowtrick_blog_figures') }}">
+                            <i class="fa fa-home" aria-hidden="true"></i> {{ 'menu.figure_list'|trans }}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('snowtrick_security_login') }}">
+                            <i class="fa fa-sign-in" aria-hidden="true"></i> {{ 'menu.login'|trans }}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('snowtrick_security_register') }}">
+                            <i class="fa fa-user" aria-hidden="true"></i> {{ 'menu.register'|trans }}
+                        </a>
+                    </li>
+
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('snowtrick_admin_figure_index') }}">
+                                <i class="fa fa-lock" aria-hidden="true"></i> {{ 'menu.admin'|trans }}
+                            </a>
+                        </li>
+                    {% endif %}
+
+
+                    {% if app.user %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('snowtrick_security_logout') }}">
+                                <i class="fa fa-sign-out" aria-hidden="true"></i> {{ 'menu.logout'|trans }}
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" id="locales">
+                            <i class="fa fa-globe" aria-hidden="true"></i>
+                            <span class="caret"></span>
+                            <span class="sr-only">{{ 'menu.choose_language'|trans }}</span>
+                        </a>
+                        <ul class="dropdown-menu locales" role="menu" aria-labelledby="locales">
+                            {% for locale in locales() %}
+                                <li {% if app.request.locale == locale.code %}aria-checked="true" class="active"{% else %}aria-checked="false"{% endif %} role="menuitem"><a href="{{ path(app.request.get('_route', 'snowtrick_blog_index'), app.request.get('_route_params', [])|merge({_locale: locale.code})) }}">{{ locale.name|capitalize }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+    <ol class="carousel-indicators">
+        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+    </ol>
+    <div class="carousel-inner" role="listbox">
+        <!-- Slide One - Set the background image for this slide in the line below -->
+        <div class="carousel-item active" style="background-image: url('http://localhost:8000/img/carousel/2018-02-19-snowboard_stalefish_-trick-thumbnail.jpg')">
+            <div class="carousel-caption d-none d-md-block">
+                <h3>Stalefish</h3>
+                <p>Grab - Snowboard</p>
+            </div>
+        </div>
+        <!-- Slide Two - Set the background image for this slide in the line below -->
+        <div class="carousel-item" style="background-image: url('http://localhost:8000/img/carousel/587b947eeccdd-169529713.jpg')">
+            <div class="carousel-caption d-none d-md-block">
+                <h3>Second Slide</h3>
+                <p>This is a description for the second slide.</p>
+            </div>
+        </div>
+        <!-- Slide Three - Set the background image for this slide in the line below -->
+        <div class="carousel-item" style="background-image: url('http://localhost:8000/img/carousel/03_tail_grab_4348.jpg')">
+            <div class="carousel-caption d-none d-md-block">
+                <h3>Third Slide</h3>
+                <p>This is a description for the third slide.</p>
+            </div>
+        </div>
+    </div>
+    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+    </div>
+
+</header>
+{% endblock %}
+{% block main %}
+
+
+<div class="container">
+    <!-- Features Section -->
+    <div class="row">
+        <div class="col-lg-6">
+            <h2 class="text-uppercase">Comunauté de Snowborders</h2>
+            <p>Référencement de figures de Snowboard :</p>
+            <ul>
+                <li>
+                    <strong>Devenez Auteur/Membre</strong>
+                </li>
+                <li>Inscrivez vous, sélectionner un compte Auteur ou Utilisateur</li>
+                <li>Ajouter des figures</li>
+                <li>Discutez avec les autres membres sur des figures</li>
+            </ul>
+            <p class="text-justify">Cette plateforme a été créée afin de rassembler toutes figures de snowbords connues et à venir!.
+                Alors si vous connaissez une ou deux figures, n'hésitez à vous inscrire et à les poster</p>
+        </div>
+        <div class="col-lg-6">
+            <img class="img-fluid rounded" src="http://placehold.it/700x450" alt="">
+        </div>
+    </div>
+    <!-- /.row -->
+
+    <hr>
+
+    <!-- Call to Action Section -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <p>Vous pouvez simplement visiter le site et profiter du travail des autres membres et/ou devnir vous aussi, auteur. Inscription rapide et sans frais. Alors n'hésitez pas ! </p>
+        </div>
+        <div class="col-md-4">
+            <a class="btn btn-lg btn-secondary btn-block" href="#">Devenir membre</a>
+        </div>
+    </div>
+
+    {#<div class="row">#}
+        {#{% for row in figures | batch(1) %}#}
+            {#<div class="col-lg-4 col-sm-6 portfolio-item">#}
+            {#{% for figure in row %}#}
+                {#<h4 class="card-title" >#}
+                    {#<a href="{{ path('snowtrick_blog_figure', {slug: figure.slug}) }}">#}
+                        {#{{ figure.title }}#}
+                    {#</a>#}
+                {#</h4>#}
+                {#<div class="card h-100">#}
+                    {#<a href="#"><img class="card-img-top" src="{{ asset(figure.image.webPath) }}" alt="{{ figure.image.alt }}"></a>#}
+                    {#<div class="card-body">#}
+
+                            {#<span class="card-text"><i class="fa fa-folder-open"></i> {{ figure.category.title |trans }} </span>#}
+                            {#<span class="card-text"><i class="fa fa-calendar"></i> {{ figure.publishedAt|localizeddate('long', 'medium', null, 'UTC') }}</span>#}
+                            {#<span class="card-text"><i class="fa fa-user"></i>Ajoutée par {{ figure.author.fullname }}</span>#}
+
+                    {#</div>#}
+
+                {#</div>#}
+
+          {#</div>#}
+
+            {#<div class="row">#}
+                {#{% for row in figures | batch(3) %}#}
+                {#<div class="col-lg-3 col-sm-6">#}
+                    {#{% for figure in row %}#}
+
+                    {#<div class="card h-100">#}
+                    {#<a href="#"><img class="card-img-top" src="{{ asset(figure.image.webPath) }}" alt="{{ figure.image.alt }}"></a>#}
+                    {#<div class="card-body">#}
+
+                        {#<h4 class="card-title">#}
+                            {#<a href="{{ path('snowtrick_blog_figure', {slug: figure.slug}) }}">#}
+                                {#{{ figure.title }}#}
+                            {#</a>#}
+                        {#</h4>#}
+                        {#<p class="card-text figure-metadata">#}
+                            {#<span class="metadata"><i class="fa fa-folder-open"></i> {{ figure.category.title |trans }} </span>#}
+                            {#<span class="metadata"><i class="fa fa-calendar"></i> {{ figure.publishedAt|localizeddate('long', 'medium', null, 'UTC') }}</span>#}
+                            {#<span class="metadata"><i class="fa fa-user"></i>Ajoutée par {{ figure.author.fullname }}</span>#}
+                        {#</p>#}
+
+                    {#</div>#}
+                {#</div>#}
+
+                {#<div class="col-lg-5 col-sm-6 portfolio-item">#}
+                    {#<div class="card h-100">#}
+                        {#<a href="#"><img class="card-img-top mx-auto" src="{{ asset(figure.image.webPath) }}" alt="{{ figure.image.alt }}"></a>#}
+                        {#<div class="card-body">#}
+                            {#<h4 class="card-title">#}
+                                {#<a href="{{ path('snowtrick_blog_figure', {slug: figure.slug}) }}">#}
+                                    {#{{ figure.title }}#}
+                                {#</a>#}
+                            {#</h4>#}
+                            {#<p class="figure-metadata">#}
+                                {#<span class="card-text metadata"><i class="fa fa-folder-open"></i> {{ figure.category.title |trans }} </span>#}
+                                {#<span class="metadata"><i class="fa fa-calendar"></i> {{ figure.publishedAt|localizeddate('long', 'medium', null, 'UTC') }}</span>#}
+                                {#<span class="metadata"><i class="fa fa-user"></i> {{ figure.author.fullname }}</span>#}
+                            {#</p>#}
+                        {#</div>#}
+                    {#</div>#}
+                {#</div>#}
+
+
+                    {#{% else %}#}
+
+                    {#<div class="well">{{ 'figure.no_figures_found'|trans }}</div>#}
+                     {#</div>#}
+
+
+
+            {#{% endfor %}#}
+                {#{% endfor %}#}
+            </div>
+
+    <!-- /.row -->
+
+
+
+
+    {#{% if figures.haveToPaginate %}#}
+        {#<div class="navigation text-center">#}
+            {#{{ pagerfanta(figures, 'twitter_bootstrap3_translated', {routeName: 'snowtrick_blog_index_paginated'}) }}#}
+        {#</div>#}
+    {#{% endif %}#}
+
+{% endblock %}
+
+{% block sidebar %}
+
+{% endblock %}

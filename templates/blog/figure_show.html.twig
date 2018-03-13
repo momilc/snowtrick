@@ -1,0 +1,124 @@
+{% extends 'base.html.twig' %}
+
+{% block body_id 'snowtrick_figure_show' %}
+
+{% block main %}
+
+    <div class="row">
+
+        <div class="col-sm-6">
+
+             <div class="col-lg-7">
+            <h1>{{ figure.title }}</h1>
+            <p class="figure-metadata">
+                <span class="metadata"><i class="fa fa-calendar"></i> {{ figure.publishedAt|localizeddate('long', 'medium', null, 'UTC') }}</span>
+                <span class="metadata"><i class="fa fa-user"></i> {{ figure.author.fullName }}</span>
+
+                <span class="metadata"><i class="fa fa-folder-open"></i>Groupe : {{ figure.category.title |trans }} </span>
+
+                <span class="metadata"><i class="fa fa-folder-open"></i> Styles : {{ figure.style.title |trans }} </span>
+            </p>
+            </div>
+                <div class="text-figure">
+                    <p>
+                        <img class="featurette-image img-fluid mx-auto align-center"
+                             src="/uploads/img/big/{{ figure.slug }}.png"
+                            alt="{{ figure.image.id }}"
+                        />
+                    </p>
+                </div>
+            </div>
+
+
+            <div class="text-justify text-lead text-uppercase col-lg-5 col-sm-12">
+                {% if is_granted('edit', figure) %}
+                    <div class="section">
+                        <a href="{{ path('snowtrick_admin_figure_edit', {id: figure.id}) }}" class="btn btn-lg btn-block btn-success">
+                            <i class="fa fa-edit" aria-hidden="true"></i> {{ 'action.edit_contents'|trans }}
+                        </a>
+                    </div>
+
+                    <div class="section">
+                        <p>
+                        {{ include('admin/blog/_delete_form.html.twig', {figure: figure}, with_context = false) }}
+                        </p>
+                    </div>
+
+                    <hr>
+                    <p>
+                        {{ figure.content|md2html }}
+
+                    </p>
+
+                    <hr>
+
+                        <p class="featurette-image img-fluid mx-auto align-center">
+                            {{ include('blog/_figure_videos.html.twig') }}
+                        </p>
+
+
+                {% endif %}
+
+            </div>
+
+
+
+
+    <div class="container-fluid">
+
+    <div class="well" id="figure-add-comment">
+
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        {{ render(controller('App\\Controller\\BlogController:commentForm', {'id': figure.id})) }}
+        {% else %}
+            <p>
+                <a href="{{ path('snowtrick_security_login', {'redirect_to': app.request.pathInfo}) }}" class="btn btn-success">
+                    <i class="fa fa-sign-in" aria-hidden="true"></i>{{ 'action.sign_in'|trans }}
+                </a>
+                {{ 'figure.to_pubish_a_comment'|trans }}
+            </p>
+         {% endif %}
+    </div>
+    <h3>
+        <i class="fa fa-comments" aria-hidden="true">{{ 'figure.num_comments'|transchoice(figure.comments|length) }}</i>
+    </h3>
+    {% for comment in figure.comments %}
+
+        <div class="row figure-comment">
+            <a name="comment_{{ comment.id }}"></a>
+            <div class="col-sm-5">
+                <h4>
+                    <strong>{{ comment.author.fullName }}</strong> {{ 'figure.commented_on'|trans }}
+                    {#Timezone is Mandatory#}
+                    <strong>{{ comment.publishedAt|localizeddate('medium', 'short', null, 'UTC') }}</strong>
+                </h4>
+                <p>
+                    <img
+                        src="/../{{ comment.photo.webPath }}"
+                        alt="{{ comment.photo.alt }}"
+                    />
+                </p>
+            </div>
+            <div id="comment-mesage" class="col-sm-5">
+                <div class="panel-body">
+                    <p>
+                        {{ comment.content|md2html }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="container-fluid">
+    {% else %}
+         <div class="figure-comment">
+            <p>{{ 'figure.no_comments'|trans }}</p>
+        </div>
+    {% endfor %}
+{% endblock %}
+
+{% block sidebar %}
+
+
+        </div>
+
+{% endblock %}

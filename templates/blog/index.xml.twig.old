@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+    <channel>
+        <title>{{ 'rss.title'|trans }}</title>
+        <description>{{ 'rss.description'|trans }}</description>
+        <pubDate>{{ 'now'|date('r', timezone='GMT') }}</pubDate>
+        <lastBuildDate>{{ (figures|last).publishedAt|default('now')|date('r', timezone='GMT') }}</lastBuildDate>
+        <link>{{ url('swnotrick_blog_index') }}</link>
+        <language>{{ app.request.locale }}</language>
+
+        {% for figure in figures %}
+            <item>
+                <title>{{ figure.title }}</title>
+                <description>{{ figure.summary }}</description>
+                <link>{{ url('blog_figure', {'slug': figure.slug}) }}</link>
+                <guid>{{ url('figure', {'slug': figure.slug}) }}</guid>
+                <pubDate>{{ figure.publishedAt|date(format='r', timezone='GMT') }}</pubDate>
+                <author>{{ figure.author.email }}</author>
+                {% for tag in figure.tags %}
+                    <category>{{ tag.name }}</category>
+                {% endfor %}
+            </item>
+        {% endfor %}
+    </channel>
+</rss>

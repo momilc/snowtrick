@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block body_id %}
+
+{% endblock %}
+
+{% block main %}
+
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        {#<h1>WELL DONE ! {{ user.username }}</h1>#}
+        <div class="profile" id="profile">
+        <form method="post" enctype="multipart/form-data">
+        {{ form_start(form) }}
+        {{ form_row(form.file) }}
+        <input type="submit">
+        {{ form_end(form) }}
+        </form>
+        </div>
+    {% endif %}
+
+{% endblock %}
+

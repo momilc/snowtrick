@@ -1,0 +1,102 @@
+{% extends 'base.html.twig' %}
+
+{% block body_id 'snowtrick_blog_index' %}
+
+{% block main %}
+    <div class="figure-title">
+        <h1 class="jumbotron text-uppercase m-sm-auto mx-auto">TOUTES LES FIGURES</h1>
+    </div>
+    <hr>
+    <br>
+        <div class="row">
+
+            {% for row in figures | batch(1) %}
+            <div class="col-lg-4 col-sm-6 portfolio-item">
+                {% for figure in row %}
+                <h4 class="card-title" >
+                    <a href="{{ path('snowtrick_blog_figure', {slug: figure.slug}) }}">
+                        {{ figure.title }}
+                    </a>
+                </h4>
+                <div class="card h-100">
+                    <a href="#"><img class="card-img-top" src="{{ asset(figure.image.webPath) }}" alt="{{ figure.image.alt }}"></a>
+                    <div class="card-body">
+
+                        <span class="card-text"><i class="fa fa-folder-open"></i> {{ figure.category.title |trans }} </span>
+                        <span class="card-text"><i class="fa fa-calendar"></i> {{ figure.publishedAt|localizeddate('long', 'medium', null, 'UTC') }}</span>
+                        <span class="card-text"><i class="fa fa-user"></i>Ajoutée par {{ figure.author.fullname }}</span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {#<div class="row">#}
+            {#{% for row in figures | batch(3) %}#}
+            {#<div class="col-lg-3 col-sm-6">#}
+            {#{% for figure in row %}#}
+
+            {#<div class="card h-100">#}
+            {#<a href="#"><img class="card-img-top" src="{{ asset(figure.image.webPath) }}" alt="{{ figure.image.alt }}"></a>#}
+            {#<div class="card-body">#}
+
+            {#<h4 class="card-title">#}
+            {#<a href="{{ path('snowtrick_blog_figure', {slug: figure.slug}) }}">#}
+            {#{{ figure.title }}#}
+            {#</a>#}
+            {#</h4>#}
+            {#<p class="card-text figure-metadata">#}
+            {#<span class="metadata"><i class="fa fa-folder-open"></i> {{ figure.category.title |trans }} </span>#}
+            {#<span class="metadata"><i class="fa fa-calendar"></i> {{ figure.publishedAt|localizeddate('long', 'medium', null, 'UTC') }}</span>#}
+            {#<span class="metadata"><i class="fa fa-user"></i>Ajoutée par {{ figure.author.fullname }}</span>#}
+            {#</p>#}
+
+            {#</div>#}
+            {#</div>#}
+
+            {#<div class="col-lg-5 col-sm-6 portfolio-item">#}
+            {#<div class="card h-100">#}
+            {#<a href="#"><img class="card-img-top mx-auto" src="{{ asset(figure.image.webPath) }}" alt="{{ figure.image.alt }}"></a>#}
+            {#<div class="card-body">#}
+            {#<h4 class="card-title">#}
+            {#<a href="{{ path('snowtrick_blog_figure', {slug: figure.slug}) }}">#}
+            {#{{ figure.title }}#}
+            {#</a>#}
+            {#</h4>#}
+            {#<p class="figure-metadata">#}
+            {#<span class="card-text metadata"><i class="fa fa-folder-open"></i> {{ figure.category.title |trans }} </span>#}
+            {#<span class="metadata"><i class="fa fa-calendar"></i> {{ figure.publishedAt|localizeddate('long', 'medium', null, 'UTC') }}</span>#}
+            {#<span class="metadata"><i class="fa fa-user"></i> {{ figure.author.fullname }}</span>#}
+            {#</p>#}
+            {#</div>#}
+            {#</div>#}
+            {#</div>#}
+
+
+            {% else %}
+
+            <div class="well">{{ 'figure.no_figures_found'|trans }}</div>
+        </div>
+
+
+
+        {% endfor %}
+        {% endfor %}
+
+    <!-- /.row -->
+
+
+
+
+    {% if figures.haveToPaginate %}
+        <div class="navigation text-center">
+            {{ pagerfanta(figures, 'twitter_bootstrap3_translated', {routeName: 'snowtrick_blog_index_paginated'}) }}
+        </div>
+    {% endif %}
+
+{% endblock %}
+
+{% block sidebar %}
+
+{% endblock %}

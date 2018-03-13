@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('build/js/search.js') }}"></script>
+{% endblock %}
+
+{% block body_id 'blog_search' %}
+
+{% block main %}
+    <form action="{{ path('snowtrick_blog_search') }}" method="get">
+        <div class="form-group">
+            <input name="q"
+                   class="form-control search-field"
+                   placeholder="{{ 'figure.search_for'|trans }}"
+                   autocomplete="on"
+                   autofocus
+                   data-no-results-message="{{ 'figure.search_no_results'|trans }}"
+            >
+        </div>
+    </form>
+
+    <div id="results">
+    </div>
+{% endblock %}
+
+{% block sidebar %}
+    {{ parent() }}
+
+{% endblock %}

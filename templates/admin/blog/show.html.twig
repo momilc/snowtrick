@@ -1,0 +1,48 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block body_id 'snowtrick_admin_figure_show' %}
+
+{% block main %}
+    <h1>{{ figure.title }}</h1>
+
+    <p class="figure-metadata">
+        <span class="metadata"><i class="fa fa-calendar"></i> {{ figure.publishedAt|localizeddate('long', 'medium', null, 'UTC') }}</span>
+        <span class="metadata"><i class="fa fa-user"></i> {{ figure.author.fullName }}</span>
+    </p>
+    <div class="well">
+        <h6>Groupe : </h6>
+        <h5><span class="metadata"><i class="fa fa-folder-open"></i> {{ figure.category.title |trans }} </span></h5>
+
+        <h5>Styles : </h5>
+        <h5><span class="metadata"><i class="fa fa-folder-open"></i> {{ figure.style.title |trans }} </span></h5>
+    </div>
+    <p class="featurette-heading">
+        <img
+                src="{{ asset(figure.image.webPath) }}"
+                alt="{{ figure.image.alt }}"
+        />
+    </p>
+    <p>
+        {{ include('blog/_figure_videos.html.twig') }}
+    </p>
+
+    {{ figure.content|md2html }}
+
+
+{% endblock %}
+
+{% block sidebar %}
+    <div class="section">
+        <a href="{{ path('snowtrick_admin_figure_edit', {id: figure.id}) }}" class="btn btn-lg btn-block btn-success">
+            <i class="fa fa-edit" aria-hidden="true"></i> {{ 'action.edit_contents'|trans }}
+        </a>
+    </div>
+
+    <div class="section">
+        {{ include('admin/blog/_delete_form.html.twig', {figure: figure}, with_context = false) }}
+    </div>
+
+    {{ parent() }}
+
+
+{% endblock %}

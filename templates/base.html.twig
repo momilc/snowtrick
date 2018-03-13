@@ -1,0 +1,157 @@
+{#
+   This is the base template used as the application layout which contains the
+   common elements and decorates all the other templates.
+   See https://symfony.com/doc/current/book/templating.html#template-inheritance-and-layouts
+#}
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <title>{% block title %}LSM SNOWTRICK OCR P6{% endblock %}</title>
+
+        {% block stylesheets %}
+            {#<link rel="stylesheet" href="{{ asset('build/css/app.css') }}">#}
+            <link href="/../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+            <!-- Custom styles for this template -->
+            <link href="/../vendor/bootstrap/css/modern-business.css" rel="stylesheet">
+            <link href="/../vendor/bootstrap/css/my.css" rel="stylesheet">
+            <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+        {% endblock %}
+
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    </head>
+
+    <body id="{% block body_id %}{% endblock %}">
+   {% block header %}
+       <header>
+
+           <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark fixed-top">
+               <div class="container">
+
+                   <a class="navbar-brand" href="{{ path('snowtrick_homepage') }}">
+                       Snowtrick
+                   </a>
+
+                   <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                       <span class="navbar-toggler-icon"></span>
+                   </button>
+                   <div class="collapse navbar-collapse" id="navbarResponsive">
+                       <ul class="navbar-nav ml-auto">
+                           <li class="nav-item">
+                               <a class="nav-link" href="{{ path('snowtrick_blog_index') }}">
+                                   <i class="fa fa-home" aria-hidden="true"></i> {{ 'menu.homepage'|trans }}
+                               </a>
+                           </li>
+                           <li class="nav-item">
+                               <a class="nav-link" href="{{ path('snowtrick_blog_figures') }}">
+                                   <i class="fa fa-home" aria-hidden="true"></i> {{ 'menu.figure_list'|trans }}
+                               </a>
+                           </li>
+                           <li class="nav-item">
+                               <a class="nav-link" href="{{ path('snowtrick_security_login') }}">
+                                   <i class="fa fa-sign-in" aria-hidden="true"></i> {{ 'menu.login'|trans }}
+                               </a>
+                           </li>
+                           <li class="nav-item">
+                               <a class="nav-link" href="{{ path('snowtrick_security_register') }}">
+                                   <i class="fa fa-user" aria-hidden="true"></i> {{ 'menu.register'|trans }}
+                               </a>
+                           </li>
+
+                           {% if is_granted('ROLE_ADMIN') %}
+                               <li class="nav-item">
+                                   <a class="nav-link" href="{{ path('snowtrick_admin_figure_index') }}">
+                                       <i class="fa fa-lock" aria-hidden="true"></i> {{ 'menu.admin'|trans }}
+                                   </a>
+                               </li>
+                           {% endif %}
+
+
+                           {% if app.user %}
+                               <li class="nav-item">
+                                   <a class="nav-link" href="{{ path('snowtrick_security_logout') }}">
+                                       <i class="fa fa-sign-out" aria-hidden="true"></i> {{ 'menu.logout'|trans }}
+                                   </a>
+                               </li>
+                           {% endif %}
+
+                           <li class="nav-item dropdown">
+                               <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" id="locales">
+                                   <i class="fa fa-globe" aria-hidden="true"></i>
+                                   <span class="caret"></span>
+                                   <span class="sr-only">{{ 'menu.choose_language'|trans }}</span>
+                               </a>
+                               <ul class="dropdown-menu locales" role="menu" aria-labelledby="locales">
+                                   {% for locale in locales() %}
+                                       <li {% if app.request.locale == locale.code %}aria-checked="true" class="active"{% else %}aria-checked="false"{% endif %} role="menuitem"><a href="{{ path(app.request.get('_route', 'snowtrick_blog_index'), app.request.get('_route_params', [])|merge({_locale: locale.code})) }}">{{ locale.name|capitalize }}</a></li>
+                                   {% endfor %}
+                               </ul>
+                           </li>
+
+                       </ul>
+                   </div>
+               </div>
+           </nav>
+
+
+            </header>
+
+        {% endblock %}
+
+        <div class="container">
+            {% block body %}
+                <div class="row-adjust row">
+                    <div id="main" class="col-lg m-sm-auto mx-auto">
+                        {{ include('default/_flash_messages.html.twig') }}
+
+                        {% block main %}{% endblock %}
+                    </div>
+
+                    <div id="sidebar col-lg-12 m-sm-auto mx-auto">
+                        {% block sidebar %}
+                                {{ render_esi(controller('Symfony\\Bundle\\FrameworkBundle\\Controller\\TemplateController::templateAction', {
+                                'template': 'blog/about.html.twig',
+                                '_locale': app.request.locale
+                            })) }}
+                        {% endblock %}
+                    </div>
+                </div>
+            {% endblock %}
+        </div>
+
+        {% block footer %}
+            <footer>
+                <div class="container">
+                    <div class="row">
+                        <div id="footer-copyright" class="col-md-6">
+                            <p>&copy; {{ 'now'|date('Y') }} - Snowtrick OCR P6 LSM</p>
+                        </div>
+                        <div id="footer-resources" class="col-md-6">
+                            <p>
+                                <a href="https://linkedin.com/lohore-sakho-mohamed" title="LSM LinkedIn">
+                                    <i class="fa fa-linkedin" aria-hidden="true"></i>
+                                </a>
+                                <a href="https://www.facebook.com/lohore-sakho-mohamed" title="LSM Facebook">
+                                    <i class="fa fa-facebook" aria-hidden="true"></i>
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        {% endblock %}
+
+        {% block javascripts %}
+            <script src="/../build/manifest.js"></script>
+            <script src="/../build/js/common.js"></script>
+            <script src="/../vendor/jquery/jquery.min.js"></script>
+            <script src="/../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+        {% endblock %}
+
+        {# timezone - localizeddate()#}
+        {{ 'now'|localizeddate('long', 'long', null, 'UTC') }}
+
+    </body>
+</html>

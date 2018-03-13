@@ -1,0 +1,16 @@
+{% if not figure.videos.empty %}
+    <p class="figure-videos">
+        {% for video in figure.videos %}
+
+        <span>
+
+            <iframe width="auto" height="200"
+                    src="https://www.youtube.com/embed/{{ video.url }}">
+
+            </iframe>
+
+        </span>
+
+        {% endfor %}
+
+{% endif %}

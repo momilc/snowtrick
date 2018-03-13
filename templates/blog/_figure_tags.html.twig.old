@@ -1,0 +1,9 @@
+{% if not figure.tags.empty %}
+    <p class="figure-tags">
+        {% for tag in figure.tags %}
+            <span class="label label-default">
+                <i class="fa fa-tag"></i>{{ tag.name }}
+            </span>
+        {% endfor %}
+    </p>
+{% endif %}

@@ -1,0 +1,15 @@
+{% if not figure.styles.empty %}
+    <h5>Styles :</h5>
+    <h5 class="figure-styles">
+
+        {% for style in figure.styles %}
+
+            <span class="metadata">
+                <i class="fa fa-folder-open"></i>{{ style.title }}
+            </span>
+
+
+        {% endfor %}
+    </h5>
+
+{% endif %}
